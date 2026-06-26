@@ -4,12 +4,17 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { MEDICAL_SYSTEM_PROMPT } from '@/lib/prompts';
 import type { ChatRequest, ChatResponse, Classification } from '@/types';
 
+const BOM = String.fromCharCode(0xFEFF);
+function cleanEnv(val: string | undefined, fallback = ''): string {
+  return (val ?? fallback).split(BOM).join('').trim();
+}
+
 const openai = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: cleanEnv(process.env.OPENROUTER_API_KEY),
   defaultHeaders: {
-    'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://medical-consultation-bot.vercel.app',
-    'X-Title': '병원 AI 상담봇 - 메디봇',
+    'HTTP-Referer': cleanEnv(process.env.NEXT_PUBLIC_APP_URL, 'https://medical-consultation-bot-two.vercel.app'),
+    'X-Title': 'Hospital AI Chatbot - Medibot',
   },
 });
 

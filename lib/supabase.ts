@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
+const BOM = String.fromCharCode(0xFEFF);
+
 function clean(val: string | undefined): string {
-  return (val ?? '').replace(/﻿/g, '').trim();
+  return (val ?? '').split(BOM).join('').trim();
 }
 
 const supabaseUrl = clean(process.env.NEXT_PUBLIC_SUPABASE_URL);
